@@ -62,12 +62,13 @@
 
 ```bash
 # Option 1: pipx (recommended — isolated, auto-updates)
-pipx install git+https://github.com/chethan62/Ghost-Downloader-3.git
+# Uses Python 3.11 (libtorrent doesn't have 3.14 wheels yet)
+pipx install git+https://github.com/chethan62/Ghost-Downloader-3.git --python python3.11
 
 # Option 2: from source
 git clone https://github.com/chethan62/Ghost-Downloader-3.git
 cd Ghost-Downloader-3
-pipx install .
+pipx install . --python python3.11
 
 # Run
 Ghost-Downloader-3

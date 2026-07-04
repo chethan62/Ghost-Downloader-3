@@ -40,3 +40,4 @@ uv.lock
 *.jks
 *.keystore
 /config/
+*.egg-info/
