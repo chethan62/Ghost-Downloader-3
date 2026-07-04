@@ -75,9 +75,11 @@ Ghost-Downloader-3
 ```
 
 **Dependencies** (installed automatically):
-- Python 3.10+
+- Python 3.11+ (use `--python python3.11` — libtorrent has no 3.14 wheels yet)
 - PySide6 (Qt 6)
 - libtorrent, ffmpeg, m3u8, mpegdash, yt-dlp
+
+**Desktop shortcut**: Auto-created on first launch. Appears as "Ghost Downloader 3" in KDE/GNOME launcher.
 
 **Arch Linux** (AUR):
 ```bash
