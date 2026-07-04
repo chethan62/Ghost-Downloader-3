@@ -1,6 +1,14 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["app*", "features*", "android*", "scripts*"]
+exclude = ["browser_extension*", "tests*"]
+
 [project]
 name = "ghost-downloader-3"
-version = "4.0"
+version = "4.0.1"
 description = "An AI-boost cross-platform multi-protocol fluent-design concurrent downloader built with Python & Qt."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -21,6 +29,9 @@ dependencies = [
     "uvloop>=0.22.1; sys_platform != 'win32'",
     "pyobjc-framework-Cocoa>=10.0; sys_platform == 'darwin'",
 ]
+
+[project.scripts]
+Ghost-Downloader-3 = "main:main"
 
 [dependency-groups]
 dev = [
