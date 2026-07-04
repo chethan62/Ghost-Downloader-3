@@ -6,6 +6,10 @@ build-backend = "setuptools.build_meta"
 include = ["app*", "features*", "android*", "scripts*"]
 exclude = ["browser_extension*", "tests*"]
 
+[tool.setuptools.package-data]
+"app" = ["assets/**/*", "assets/icons/**/*", "assets/file_icons/**/*"]
+"features" = ["*/icons/**/*"]
+
 [project]
 name = "ghost-downloader-3"
 version = "4.0.1"

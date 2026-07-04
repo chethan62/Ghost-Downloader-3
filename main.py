@@ -5,15 +5,28 @@ import sys
 
 
 def _ensure_desktop_shortcut() -> None:
-    """Create .desktop launcher if it doesn't exist."""
+    """Create .desktop launcher + icon if they don't exist."""
+    import shutil
+    import pkgutil
+
     desktop_dir = os.path.expanduser("~/.local/share/applications")
+    icon_dir = os.path.expanduser("~/.local/share/icons/hicolor/256x256/apps")
     desktop_file = os.path.join(desktop_dir, "ghost-downloader-3.desktop")
+    icon_file = os.path.join(icon_dir, "ghost-downloader-3.png")
+
+    # Install icon
+    if not os.path.exists(icon_file):
+        os.makedirs(icon_dir, exist_ok=True)
+        try:
+            data = pkgutil.get_data("app.assets", "logo.png")
+            if data:
+                with open(icon_file, "wb") as f:
+                    f.write(data)
+        except Exception:
+            pass
+
     if os.path.exists(desktop_file):
         return
-
-    repo_root = os.path.dirname(os.path.abspath(__file__))
-    icon_path = os.path.join(repo_root, "app", "assets", "logo.png")
-    bin_path = os.environ.get("PIPX_BIN_DIR", os.path.join(os.path.expanduser("~/.local/bin"), "Ghost-Downloader-3"))
 
     os.makedirs(desktop_dir, exist_ok=True)
     content = """[Desktop Entry]
@@ -21,6 +34,7 @@ Type=Application
 Name=Ghost Downloader 3
 Comment=AI-powered cross-platform multi-protocol downloader
 Exec=Ghost-Downloader-3
+Icon=ghost-downloader-3
 Terminal=false
 Categories=Network;FileTransfer;
 """
