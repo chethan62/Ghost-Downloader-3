@@ -2,17 +2,17 @@
   <a href="README_zh.md">简体中文</a> | English
 </h4>
 
-> **Fork** of [XiaoYouChR/Ghost-Downloader-3](https://github.com/XiaoYouChR/Ghost-Downloader-3) — adds vsd (Rust) as alternative HLS engine, English UI translation, and MediaSniff integration support.
+> **Fork** of [XiaoYouChR/Ghost-Downloader-3](https://github.com/XiaoYouChR/Ghost-Downloader-3) — adds **vsd (Rust)** as alternative HLS/DASH engine, signed Firefox extension, and updated install guide.
 
 > [!NOTE]
-> Due to academic commitments, development on this project has slowed down recently.
+> Due to academic commitments, upstream development has slowed down. This fork adds practical improvements for daily use.
 
 <!-- PROJECT LOGO -->
 <div align="center">
 
 ![Banner](.github/assets/banner.webp)
 
-<a href="https://trendshift.io/repositories/13847" target="_blank"><img src="https://trendshift.io/api/badge/repositories/13847" alt="XiaoYouChR%2FGhost-Downloader-3 | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+<a href="https://trendshift.io/repositories/13847" target="_blank"><img src="https://trendshift.io/api/badge/repositories/13847" alt="chethan62/Ghost-Downloader-3 | Trendshift" style="width: 250px; height: 55px;"/></a>
 
 ### AI-powered next-generation cross-platform multithreaded downloader
 
@@ -21,187 +21,146 @@
 [![Issues][issues-shield]][issues-url]
 [![Release][release-shield]][release-url]
 [![Downloads][downloads-shield]][release-url]
-[![QQGroup](https://img.shields.io/badge/QQ_Group-756042420-blue.svg?color=blue&style=for-the-badge)](https://qm.qq.com/q/gPk6FR1Hby)
 
-##### [Documentation](https://gd.xychr.com/en/docs/) · [Report Bug](https://github.com/XiaoYouChR/Ghost-Downloader-3/issues/new?template=bug_report.yml) · [Request Feature](https://github.com/XiaoYouChR/Ghost-Downloader-3/issues/new?template=feature_request.yml)
+##### [Releases](https://github.com/chethan62/Ghost-Downloader-3/releases) · [Report Bug](https://github.com/chethan62/Ghost-Downloader-3/issues/new?template=bug_report.yml) · [Request Feature](https://github.com/chethan62/Ghost-Downloader-3/issues/new?template=feature_request.yml)
 
 </div>
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-* A downloader built out of passion, and my first Python project 😣
-* It was originally created to help a Bilibili creator integrate resources 😵‍💫
-* Thanks to Python's🐍 accessibility, this project will open plugin🧩 support in the future (plugin API is still being stabilized...)
+* A downloader built out of passion — Python + Qt (PySide6) + Fluent UI
+* Originally created to help a Bilibili creator integrate resources
+* **Fork improvements**:
+  - **vsd (Rust)** — 27 MB single binary, 5 ms startup, replaces N_m3u8DL-RE for HLS/DASH
+  - **Signed Firefox extension** — installs directly, no dev mode needed
+  - **Download Engine selector** — choose N_m3u8DL-RE (full features) or vsd (speed)
 
-|    Platform    | Required Version |  Architectures   | Compatible |
-|:--------------:|:----------------:|:----------------:|:----------:|
-|  🐧 **Linux**  |  `glibc 2.35+`   | `x86_64`/`arm64` |     ✅      |
-| 🪟 **Windows** |     `7 SP1+`     | `x86_64`/`arm64` |     ✅      |
-|  🍎 **macOS**  |     `13.0+`      | `x86_64`/`arm64` |     ✅      |
-| 🤖 **Android** |      `9.0+`      |   `arm64-v8a`    |     ✅      |
+| Platform | Required Version | Architectures | Compatible |
+|:--------:|:----------------:|:-------------:|:----------:|
+| 🐧 Linux  | `glibc 2.35+`   | `x86_64`/`arm64` | ✅ |
+| 🪟 Windows | `7 SP1+`      | `x86_64`/`arm64` | ✅ |
+| 🍎 macOS  | `13.0+`        | `x86_64`/`arm64` | ✅ |
+| 🤖 Android | `9.0+`        | `arm64-v8a`     | ✅ |
 
 > [!WARNING]
 > Qt `6.6+` no longer supports CPUs without the `AVX` instruction set.
 
-> [!TIP]
-> **Arch Linux AUR support**: Community-maintained packages `ghost-downloader-bin` and `ghost-downloader-git` are now available (Maintainer: [@zxp19821005](https://github.com/zxp19821005))
-
-<!-- FEATURES -->
 ## Features
 
-* IDM-style intelligent chunking⚡ without requiring file merging, plus AI smart acceleration 🚀
-* Supports HTTP, Magnet / BT, FTP, M3U8, MPEG-DASH and more 🌐
-* Records M3U8 live streams📺 with real-time decryption🔓, fully supported on Android as well
-* The companion browser extension🦊 sniffs media resources right off web pages
-* Tasks can be paused, edited✏️ (URL, headers, proxy) and resumed without losing progress
-* A complete Android version📱 with background downloading and completion notifications 🔔
+* **IDM-style chunked downloads** ⚡ — multi-threaded HTTP, resume support
+* **Multi-protocol** 🌐 — HTTP, Magnet/BitTorrent, FTP, M3U8 (HLS), MPEG-DASH
+* **Live HLS recording** 📺 — real-time decryption 🔓, Android supported
+* **Browser extension** 🦊 — sniffs media (HLS, DASH, MP4, audio, images) off pages
+* **Pause / edit / resume** ✏️ — change URL, headers, proxy mid-download
+* **Android app** 📱 — background downloads, notifications
+* **AI smart acceleration** 🚀 — dynamic chunk rebalancing
 
-<!-- SCREEN SHOTS -->
-## Screenshots
+## Installation
 
-![QQ20260326-204347](https://github.com/user-attachments/assets/3e57b113-200c-4286-91cb-b52fe7d1711c)
+### Desktop App (Linux / Windows / macOS)
 
-<!-- ROADMAP -->
-## Roadmap
+```bash
+# Option 1: pipx (recommended — isolated, auto-updates)
+pipx install git+https://github.com/chethan62/Ghost-Downloader-3.git
 
-- ❌ Native download engine (lower memory usage while running in the background)
-- ❌ Make the plugin API public
-- ❌ Enhanced task editing (powerful features like binding multiple Sessions to one task)
-- ❌ Support for eD2k protocol
+# Option 2: from source
+git clone https://github.com/chethan62/Ghost-Downloader-3.git
+cd Ghost-Downloader-3
+pipx install .
 
-Visit [Open issues](https://github.com/XiaoYouChR/Ghost-Downloader-3/issues) to see all requested features (and known issues).
+# Run
+Ghost-Downloader-3
+```
 
-<!-- SPONSOR -->
-## Sponsor
+**Dependencies** (installed automatically):
+- Python 3.10+
+- PySide6 (Qt 6)
+- libtorrent, ffmpeg, m3u8, mpegdash, yt-dlp
 
-| [![SignPath](https://signpath.org/assets/favicon-50x50.png)](https://signpath.org/) | Free code signing provided by [SignPath.io](https://about.signpath.io/), with certificates by [SignPath Foundation](https://signpath.org/) |
-|-------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------|
+**Arch Linux** (AUR):
+```bash
+yay -S ghost-downloader-git  # community package tracks upstream
+```
 
-<!-- CONTRIBUTING -->
+### Browser Extension
+
+| Browser | Install Method |
+|---------|----------------|
+| **Firefox** (easiest) | 1. Download `ghost-downloader-firefox-2.0.2-signed.xpi` from [Releases](https://github.com/chethan62/Ghost-Downloader-3/releases/tag/v2.0.2-fork)<br>2. Open in Firefox → **Add** |
+| **Chrome / Edge / Brave / Vivaldi** | 1. Download `ghost-downloader-chrome-2.0.2.zip` from [Releases](https://github.com/chethan62/Ghost-Downloader-3/releases/tag/v2.0.2-fork)<br>2. Unzip → `chrome://extensions` → **Developer mode** → **Load unpacked** → select folder |
+
+### Connect Extension to Desktop App
+
+1. Open **Ghost Downloader** desktop app
+2. Settings → **Browser Extension** → **Start Browser Extension Server** (port 15151 by default)
+3. Click extension toolbar icon → **Pair** → **Auto Pair**
+4. Confirm pairing in desktop app popup
+
+## Usage
+
+1. **Visit a video page** (YouTube, Bilibili, Dailymotion, generic HLS/DASH)
+2. **Click extension icon** → **Resources** tab shows sniffed streams:
+   - HLS (`.m3u8`) — with variant quality ladder
+   - DASH (`.mpd`) — audio/video tracks separated
+   - Direct MP4/WebM, audio, images
+4. **Select** → **Send to Desktop** → downloads in Ghost Downloader
+5. **Monitor** progress in desktop app (IDM-style chunks, resume, speed limit)
+
+### Download Engine: N_m3u8DL-RE vs vsd
+
+Settings → **M3U8** → **Download Engine**:
+
+| Engine | Size | Startup | Features |
+|--------|------|---------|----------|
+| **N_m3u8DL-RE** (default) | 50 MB + .NET | ~300 ms | Ad filtering, rate limit, live recording, MSS, binary merge |
+| **vsd (Rust)** | 27 MB | **~5 ms** | HLS/DASH, DRM keys, resume, subtitles, concurrent segments |
+
+For most sites: **vsd is faster to start**. Use N_m3u8DL-RE if you need ad filtering or MSS.
+
+## Roadmap (Fork)
+
+- ✅ vsd (Rust) as alternative HLS engine
+- ✅ Signed Firefox extension
+- ⏳ Native Rust download engine (lower memory)
+- ⏳ Public plugin API
+- ⏳ eD2k protocol
+
 ## Contributing
 
-Contributions make the open source community an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-If you have a suggestion, fork the repo and create a pull request. You can also simply open an issue with the "Enhancement" tag. Don't forget to give the project a star⭐! Thanks again!
-
 1. Fork the Project
-2. Create your Feature Branch (git checkout -b feature/AmazingFeature)
-3. Commit your Changes (git commit -m 'Add some AmazingFeature')
-4. Push to the Branch (git push origin feature/AmazingFeature)
+2. Create Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-Thanks to all contributors who have participated in this project!
-
-[![Contributors](http://contrib.nn.ci/api?repo=XiaoYouChR/Ghost-Downloader-3)](https://github.com/XiaoYouChR/Ghost-Downloader-3/graphs/contributors)
-
-## Translation Contributors
-
-> [!TIP]
-> If you'd like to help translate Ghost Downloader, welcome to join the Crowdin project: [ghost-downloader](https://crowdin.com/project/ghost-downloader)
-
-<!-- CROWDIN-CONTRIBUTORS-START -->
-<table>
-  <tbody>
-    <tr>
-      <td align="center" valign="top">
-        <a href="https://crowdin.com/profile/XiaoYouChR"><img alt="logo" style="width: 64px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/17224586/medium/60e068e9c11d951cadf3eccec0afbeab.jpeg" />
-          <br />
-          <sub><b>XiaoYouChR</b></sub></a>
-        <br />
-        <sub><b>14249 words</b></sub>
-      </td>
-      <td align="center" valign="top">
-        <a href="https://crowdin.com/profile/i0ntempest"><img alt="logo" style="width: 64px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/17636930/medium/f6bf4e67c7b87221f2e7e04345f8c6b2.jpeg" />
-          <br />
-          <sub><b>i0ntempest</b></sub></a>
-        <br />
-        <sub><b>1988 words</b></sub>
-      </td>
-      <td align="center" valign="top">
-        <a href="https://crowdin.com/profile/ReM2812"><img alt="logo" style="width: 64px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/17626502/medium/8d12a395a224c0f9d5546a8e5621186c.jpg" />
-          <br />
-          <sub><b>ReM2812</b></sub></a>
-        <br />
-        <sub><b>1010 words</b></sub>
-      </td>
-      <td align="center" valign="top">
-        <a href="https://crowdin.com/profile/Dima88888"><img alt="logo" style="width: 64px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/16304162/medium/706302f8224fffaf9d81f8cc4168ed24_default.png" />
-          <br />
-          <sub><b>Dima88888</b></sub></a>
-        <br />
-        <sub><b>115 words</b></sub>
-      </td>
-    </tr>
-  </tbody>
-</table>
-<!-- CROWDIN-CONTRIBUTORS-END -->
-
-<!-- LICENSE -->
 ## License
 
-Distributed under the GPL v3.0 License. Open `LICENSE` for more details.
+Distributed under the **GPL v3.0** License. See `LICENSE` for details.
 
-Copyright © 2024-2026 XiaoYouChR.
+Copyright © 2024-2026 XiaoYouChR (upstream), chethan62 (fork).
 
-<!-- CONTACT -->
 ## Contact
 
-> [!IMPORTANT]
-> Welcome to join the Ghost Downloader user group: [756042420](https://qm.qq.com/q/gPk6FR1Hby)
-
-* [E-mail](mailto:XiaoYouChR@qq.com) - XiaoYouChR@qq.com
-
-<!-- ACKNOWLEDGMENTS -->
-## References
-
-* [aioftp](https://github.com/aio-libs/aioftp) Ftp client/server for asyncio
-* [cat-catch](https://github.com/xifangczy/cat-catch) Browser Resource Sniffing Extension
-* [desktop-notifier](https://github.com/samschott/desktop-notifier) Python library for cross-platform desktop notifications
-* [FFmpeg](https://ffmpeg.org/) A complete, cross-platform solution to record, convert and stream audio and video
-* [libtorrent](https://github.com/arvidn/libtorrent) An efficient feature complete C++ bittorrent implementation
-* [loguru](https://github.com/Delgan/loguru) A library which aims to bring enjoyable logging in Python
-* [m3u8](https://github.com/globocom/m3u8) Python m3u8 parser
-* [mpegdash](https://github.com/sangoma/mpegdash) MPEG-DASH MPD parser
-* [niquests](https://github.com/jawah/niquests) Automatic HTTP/1.1, HTTP/2, and HTTP/3. WebSocket, and SSE included.
-* [Nuitka](https://github.com/Nuitka/Nuitka) The Python compiler
-* [PyQt-Fluent-Widgets](https://github.com/zhiyiYo/PyQt-Fluent-Widgets) Powerful, extensible, and elegant Fluent Design-style widget library
-* [PySide6](https://github.com/PySide/pyside-setup) The official Python module
-* [uvloop](https://github.com/MagicStack/uvloop) Ultra fast asyncio event loop
-* [winloop](https://github.com/Vizonex/Winloop) An alternative to uvloop for Windows
+- **Fork issues**: [chethan62/Ghost-Downloader-3/issues](https://github.com/chethan62/Ghost-Downloader-3/issues)
+- **Upstream**: XiaoYouChR@qq.com | [QQ Group](https://qm.qq.com/q/gPk6FR1Hby)
 
 ## Acknowledgments
 
-* [@zhiyiYo](https://github.com/zhiyiYo/) is amazing and provided a lot of help for this project.
-* [@空糖_SuGar](https://github.com/SuGar0218/) created the project banner.
+* [cat-catch](https://github.com/xifangczy/cat-catch) — browser sniffing (vendored in extension)
+* [vsd](https://github.com/clitic/vsd) — Rust HLS/DASH engine (forked to [chethan62/vsd](https://github.com/chethan62/vsd) with `--percent-only`)
+* [N_m3u8DL-RE](https://github.com/nilaoda/N_m3u8DL-RE) — C# HLS/DASH engine
+* [FFmpeg](https://ffmpeg.org/) • [yt-dlp](https://github.com/yt-dlp/yt-dlp) • [libtorrent](https://github.com/arvidn/libtorrent)
+* [PySide6](https://github.com/PySide/pyside-setup) • [Fluent UI](https://github.com/zhiyiYo/PyQt-Fluent-Widgets)
 
-<picture>
-  <source
-    media="(prefers-color-scheme: dark)"
-    srcset="
-      https://api.star-history.com/svg?repos=XiaoYouChR/Ghost-Downloader-3&type=Date&theme=dark
-    "
-  />
-  <source
-    media="(prefers-color-scheme: light)"
-    srcset="
-      https://api.star-history.com/svg?repos=XiaoYouChR/Ghost-Downloader-3&type=Date&theme=dark
-    "
-  />
-  <img
-    alt="Star History Chart"
-    src="https://api.star-history.com/svg?repos=XiaoYouChR/Ghost-Downloader-3&type=Date&theme=dark"
-  />
-</picture>
+---
 
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[forks-shield]: https://img.shields.io/github/forks/XiaoYouChR/Ghost-Downloader-3.svg?style=for-the-badge
-[forks-url]: https://github.com/XiaoYouChR/Ghost-Downloader-3/network/members
-[stars-shield]: https://img.shields.io/github/stars/XiaoYouChR/Ghost-Downloader-3.svg?style=for-the-badge
-[stars-url]: https://github.com/XiaoYouChR/Ghost-Downloader-3/stargazers
-[issues-shield]: https://img.shields.io/github/issues/XiaoYouChR/Ghost-Downloader-3.svg?style=for-the-badge
-[issues-url]: https://github.com/XiaoYouChR/Ghost-Downloader-3/issues
-[release-shield]: https://img.shields.io/github/v/release/XiaoYouChR/Ghost-Downloader-3?style=for-the-badge
-[release-url]: https://github.com/XiaoYouChR/Ghost-Downloader-3/releases/latest
-[downloads-shield]: https://img.shields.io/github/downloads/XiaoYouChR/Ghost-Downloader-3/total?style=for-the-badge
+[forks-shield]: https://img.shields.io/github/forks/chethan62/Ghost-Downloader-3.svg?style=for-the-badge
+[forks-url]: https://github.com/chethan62/Ghost-Downloader-3/network/members
+[stars-shield]: https://img.shields.io/github/stars/chethan62/Ghost-Downloader-3.svg?style=for-the-badge
+[stars-url]: https://github.com/chethan62/Ghost-Downloader-3/stargazers
+[issues-shield]: https://img.shields.io/github/issues/chethan62/Ghost-Downloader-3.svg?style=for-the-badge
+[issues-url]: https://github.com/chethan62/Ghost-Downloader-3/issues
+[release-shield]: https://img.shields.io/github/v/release/chethan62/Ghost-Downloader-3?style=for-the-badge
+[release-url]: https://github.com/chethan62/Ghost-Downloader-3/releases/latest
+[downloads-shield]: https://img.shields.io/github/downloads/chethan62/Ghost-Downloader-3/total?style=for-the-badge
