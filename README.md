@@ -2,6 +2,8 @@
   <a href="README_zh.md">简体中文</a> | English
 </h4>
 
+> **Fork** of [XiaoYouChR/Ghost-Downloader-3](https://github.com/XiaoYouChR/Ghost-Downloader-3) — adds vsd (Rust) as alternative HLS engine, English UI translation, and MediaSniff integration support.
+
 > [!NOTE]
 > Due to academic commitments, development on this project has slowed down recently.
 

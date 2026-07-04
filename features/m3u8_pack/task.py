@@ -254,6 +254,22 @@ class M3U8TaskStep(TaskStep):
 
         return args
 
+    def _buildVsdCommand(self) -> list[str]:
+        """Build command for vsd (Rust) HLS/DASH engine."""
+        args = [
+            "save",
+            self.task.url,
+            "--percent-only",
+            "--color", "never",
+            "-t", str(self.threadCount),
+            "-o", toPosixPath(self.task.outputFolder / self._saveName) + "." + self.outputFormat,
+        ]
+        for name, value in self.headers.items():
+            text = value.strip()
+            if text:
+                args.extend(["-H", f"{name}: {text}"])
+        return args
+
     def _parseOutputLine(self, line: str):
         text = line.strip()
         if not text:
@@ -269,6 +285,12 @@ class M3U8TaskStep(TaskStep):
             totalSize = toBytes(vodMatch.group(6), vodMatch.group(7))
             if totalSize > 0:
                 self.task.fileSize = totalSize
+            return
+
+        # vsd percent-only output: "34.5%"
+        vsdMatch = re.search(r'^(\d+\.?\d*)%$', text)
+        if vsdMatch:
+            self.progress = float(vsdMatch.group(1))
             return
 
         liveMatch = LIVE_PROGRESS_PATTERN.search(text)
@@ -331,9 +353,17 @@ class M3U8TaskStep(TaskStep):
         self._stopping = False
         self._process = None
 
-        execPath = m3u8Runtime.path()
-        if not execPath:
-            raise TaskError("{name} 未安装，请在设置中安装", name="N_m3u8DL-RE")
+        # Check which engine to use
+        from .config import m3u8Config
+        useVsd = m3u8Config.downloadEngine.value == "vsd (Rust)"
+        from .config import vsdRuntime
+
+        if useVsd and vsdRuntime.path():
+            execPath = vsdRuntime.path()
+        else:
+            execPath = m3u8Runtime.path()
+            if not execPath:
+                raise TaskError("{name} not installed, please install in settings", name="N_m3u8DL-RE")
 
         self.task.outputFolder.mkdir(parents=True, exist_ok=True)
         Path(self._tempFolder).mkdir(parents=True, exist_ok=True)
@@ -345,7 +375,10 @@ class M3U8TaskStep(TaskStep):
 
         outputTask = None
         try:
-            command = self._buildCommand()
+            if useVsd and vsdRuntime.path():
+                command = self._buildVsdCommand()
+            else:
+                command = self._buildCommand()
             self._process = await asyncio.create_subprocess_exec(
                 execPath, *command,
                 cwd=Path(execPath).parent,

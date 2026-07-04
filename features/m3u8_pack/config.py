@@ -24,6 +24,10 @@ from app.platform.filesystem import findExecutable
 RELEASE_TAG = "v0.5.1-beta"
 RELEASE_API = f"https://api.github.com/repos/nilaoda/N_m3u8DL-RE/releases/tags/{RELEASE_TAG}"
 
+# vsd (Rust) fork — lightweight alternative HLS/DASH engine
+VSD_RELEASE_TAG = "v0.5.0-mediaSniff"
+VSD_RELEASE_API = f"https://api.github.com/repos/chethan62/vsd/releases/tags/{VSD_RELEASE_TAG}"
+
 
 class M3U8Config(PackConfig):
     installFolder = ConfigItem("M3U8", "InstallFolder", f"{APP_DATA_DIR}/M3U8DL", FolderValidator())
@@ -57,6 +61,10 @@ class M3U8Config(PackConfig):
     shouldDeleteTemp = ConfigItem("M3U8", "DelAfterDone", True, BoolValidator())
     customMuxAfterDone = ConfigItem("M3U8", "CustomMuxAfterDone", "")
     shouldSelectAllAudioSubtitle = ConfigItem("M3U8", "SelectAllAudioSubtitle", True, BoolValidator())
+    downloadEngine = OptionsConfigItem(
+        "M3U8", "DownloadEngine", "N_m3u8DL-RE",
+        OptionsValidator(["N_m3u8DL-RE", "vsd (Rust)"]),
+    )
 
     def settingGroups(self, parent: QWidget) -> list[CollapsibleSettingCardGroup]:
         import sys
@@ -83,6 +91,8 @@ class M3U8Config(PackConfig):
                 self.associateFileTypes, m3u8Group,
             ))
         cards += [
+            ComboBoxSettingCard(self.downloadEngine, FluentIcon.ENGINE, self.tr("Download Engine"),
+                self.tr("N_m3u8DL-RE (full-featured) or vsd (Rust, faster startup)"), texts=["N_m3u8DL-RE", "vsd (Rust)"], parent=m3u8Group),
             ComboBoxSettingCard(self.outputFormat, FluentIcon.VIDEO, self.tr("输出容器"),
                 self.tr("点播下载完成后优先使用 ffmpeg 混流为指定容器"), texts=["MP4", "MKV"], parent=m3u8Group),
             RangeSettingCard(self.threadCount, FluentIcon.CLOUD, self.tr("分片线程数"),
@@ -215,3 +225,65 @@ class M3U8Runtime(BinaryRuntime):
 
 
 m3u8Runtime = M3U8Runtime()
+
+
+class VsdRuntime(BinaryRuntime):
+    """vsd (Rust) — lightweight HLS/DASH engine, 27 MB single binary."""
+    name = "vsd"
+    canInstall = not IS_ANDROID
+
+    def path(self) -> str:
+        if IS_ANDROID:
+            return ""
+        # Check PATH first, then install folder
+        from shutil import which
+        found = which("vsd")
+        if found:
+            return found
+        return findExecutable(Path(m3u8Config.installFolder.value), "vsd")
+
+    async def installTask(self) -> Task:
+        import platform as plat
+
+        machine = plat.machine().lower()
+        if sys.platform == "win32":
+            target = "windows-x64" if machine in {"amd64", "x86_64"} else ""
+        elif sys.platform == "darwin":
+            target = "macos-x64" if machine in {"amd64", "x86_64"} else "macos-arm64"
+        elif sys.platform == "linux":
+            target = "linux-x64"
+        else:
+            raise RuntimeError(f"vsd does not support platform: {sys.platform}")
+
+        if not target:
+            raise RuntimeError(f"vsd has no binary for {machine} on {sys.platform}")
+
+        client = buildClient(headers={"accept": "application/vnd.github+json"})
+        try:
+            response = await client.get(VSD_RELEASE_API)
+            response.raise_for_status()
+            release = await response.json()
+        finally:
+            client.close()
+
+        assets = release.get("assets")
+        if not isinstance(assets, list):
+            raise RuntimeError("GitHub Release returned invalid assets for vsd")
+
+        asset = next((item for item in assets if target in item["name"]), None)
+        if asset is None:
+            raise RuntimeError(f"No vsd binary for target: {target}")
+
+        from app.services.feature_service import featureService
+        from app.models.task import BinaryInstallOptions
+
+        binaryName = "vsd.exe" if sys.platform == "win32" else "vsd"
+        return await featureService.parse(BinaryInstallOptions(
+            url=asset["browser_download_url"].strip(),
+            outputFolder=Path(m3u8Config.installFolder.value),
+            name=f"vsd install ({target})",
+            executableNames=(binaryName,),
+        ))
+
+
+vsdRuntime = VsdRuntime()
