@@ -36,7 +36,7 @@ function createManifest(target) {
     };
     manifest.browser_specific_settings = {
       gecko: {
-        id: firefoxAddonId,
+        id: "ghostdownloader-fork@chethan62.github.com",
         strict_min_version: "113.0",
         data_collection_permissions: {
           required: ["browsingActivity", "websiteContent"],
