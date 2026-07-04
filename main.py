@@ -16,18 +16,17 @@ def _ensure_desktop_shortcut() -> None:
     bin_path = os.environ.get("PIPX_BIN_DIR", os.path.join(os.path.expanduser("~/.local/bin"), "Ghost-Downloader-3"))
 
     os.makedirs(desktop_dir, exist_ok=True)
-    content = f"""[Desktop Entry]
+    content = """[Desktop Entry]
 Type=Application
 Name=Ghost Downloader 3
-Comment=AI-boost cross-platform multi-protocol downloader
-Icon={icon_path}
+Comment=AI-powered cross-platform multi-protocol downloader
 Exec=Ghost-Downloader-3
 Terminal=false
-Categories=Network;
-StartupWMClass=Ghost-Downloader-3
+Categories=Network;FileTransfer;
 """
     with open(desktop_file, "w") as f:
         f.write(content)
+    print("Created application shortcut: Ghost Downloader 3")
 
 
 def main() -> int:
